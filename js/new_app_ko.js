@@ -5,7 +5,9 @@ var viewModel = {
     locations: ko.observableArray(model.locations),
     venuesList: ko.observableArray(model.venuesList),
     sublistSetting: ko.observable(false),
-    activeLocation: ko.observable("TBD")
+    activeLocation: ko.observable("TBD"),
+    errorShow: ko.observable(false),
+    errorValue: ko.observable("an error!")
 };
 
 
@@ -298,7 +300,12 @@ function generateSubList(index_id) {
         "async": true,
         "crossDomain": true,
         "url": `https://api.foursquare.com/v2/venues/search?ll=${ll}&oauth_token=${oauth_token}&v=20180215`,
-        "method": "GET"
+        "method": "GET",
+        "error": function() {
+            // alert("error has occured");
+            viewModel.errorShow(true);
+            viewModel.errorValue("We're having some problems displaying the foursquare data, please try again later!")
+        }
     }
 
     $.ajax(fourSquareApi).done(function(response) {
@@ -309,6 +316,13 @@ function generateSubList(index_id) {
             viewModel.venuesList()[i].cat(response.response.venues[i].categories[0].name);
         }
         viewModel.sublistSetting(true);
+        viewModel.errorShow(false);
+
     });
 
+}
+
+function googleError() {
+    viewModel.errorShow(true);
+    viewModel.errorValue("We're having some problems connecting to google, please try again later!")
 }

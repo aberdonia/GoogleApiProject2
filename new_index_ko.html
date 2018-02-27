@@ -4,7 +4,7 @@
       <title>Google Maps API Project - Jamie</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel='stylesheet' href='css/styles.css'>
-      <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-jz6KVwYruZo-E_xGeStdTe8BSe5KtiE&callback=initMap"></script>
+
    </head>
    <body>
       <div class="container">
@@ -35,6 +35,7 @@
                   <span style="font-style: italic; font-size: 14px;" data-bind="text: cat"></span>
                </ul>
                <input data-bind="click: search, visible: sublistSetting" type="button" value="Close">
+               <p data-bind="text: errorValue, visible: errorShow"></p>
             </div>
          </nav>
          <div id="map"></div>
@@ -43,5 +44,6 @@
       <script type='text/javascript' src='js/data.js'></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
       <script type='text/javascript' src='js/new_app_ko.js'></script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB-jz6KVwYruZo-E_xGeStdTe8BSe5KtiE&callback=initMap" onerror="googleError()"></script>
    </body>
 </html>
