@@ -78,7 +78,11 @@ function initMap() {
             this.setIcon(highlightedIcon);
         });
         marker.addListener('click', function() {
-            this.setIcon(onclickIcon);
+            toggleBounce(this);
+            console.log(this.id);
+            console.log(viewModel.locations()[this.id]);
+            clickListing(viewModel.locations()[this.id]);
+
         });
 
         marker.addListener('mouseout', function() {
@@ -90,10 +94,23 @@ function initMap() {
     showListings();
 }
 
+function toggleBounce(marker) {
+    if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+    // 2 sec delay before stopping
+    setTimeout(function() {
+        marker.setAnimation(null);
+    }, 2000);
+}
+
 function populateInfoWindow(marker, infowindow) {
 
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
+        console.log(marker);
         // Clear the infowindow content to give the streetview time to load.
         infowindow.setContent('');
         infowindow.marker = marker;
@@ -161,18 +178,15 @@ function search() {
     }
 }
 
-function clickListing() {
-    var index_id = viewModel.locations().indexOf(this);
+// Pass in location from both markers and from knockout bindings (on click)
+function clickListing(location) {
+    var index_id = viewModel.locations().indexOf(location);
     console.log(index_id);
     populateInfoWindow(markers[index_id], largeInfowindow);
     toggleBounce(markers[index_id]);
     generateSubList(index_id);
 }
 
-
-function showSubList(index_id) {
-    document.getElementById(`sub-list-${index_id}`).display = "";
-}
 
 
 // Need to toggle visibility of sidebar with showlist
@@ -277,21 +291,6 @@ function generateSubList(index_id) {
     var lng = viewModel.locations()[index_id].location.lng;
     var ll = `${lat},${lng}`;
     var oauth_token = "SRHXBQQUAGGQ1BWGQD3HXMYQCURB1YVDJQEXJ5VZAGOLE2C1";
-    var grabSubList = document.getElementById(`sub-list-${index_id}`);
-    if (grabSubList !== null) {
-        console.log("present");
-        // return;
-        if (grabSubList.style.display !== 'none') {
-            console.log("displaying");
-            // grabSubList.style.display = 'none';
-            return;
-        } else {
-            console.log("none");
-        }
-        showSubList(index_id);
-    } else {
-        console.log("not present");
-    }
 
     viewModel.activeLocation(viewModel.locations()[index_id].title);
 
